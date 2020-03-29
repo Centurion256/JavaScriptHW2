@@ -21,30 +21,36 @@ let fields =
 
 function validateMe(event) {
     event.preventDefault();
+
     let nodes = event.target.elements;
     let valid = true;
-    for (let field in fields) valid &= validateElement(nodes[field]); 
+    //For each field in the form, verify it's validity.
+    //Bitwise binary '&'(AND) operation is used to determine wether at least one call yields false.
+    for (let field in fields) valid &= validateElement(nodes[field]);
     valid ? event.target.submit() : event.target.reset();
-    return valid;
-    
+
+    return valid;  
   }
 
 function validateElement(elem) {   
-    
     let validElement = true;
+
     let currErrorNode = elem.parentNode.querySelector('p.help-block');
     currErrorNode.innerHTML = '';
+
     let currErrors = document.createElement('ul');
     currErrors.setAttribute("role", "alert");
-    if (!fields[elem.id].test(elem.value))
-    {
+
+    if (!fields[elem.id].test(elem.value)) {
       let li = document.createElement('li');
       li.innerText = `${elem.id} format is incorrect`;
       currErrors.appendChild(li);
       validElement = false;
     }
+
     if (currErrors.childElementCount > 0) {
       currErrorNode.appendChild(currErrors)
     }
+
     return validElement;
   }
